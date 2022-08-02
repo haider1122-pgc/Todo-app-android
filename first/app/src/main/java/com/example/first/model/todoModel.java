@@ -1,6 +1,9 @@
 package com.example.first.model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class todoModel {
+
     private String title,descriptipn;
     private String time;
     private boolean status;
@@ -10,6 +13,7 @@ public class todoModel {
         this.descriptipn = descriptipn;
         this.time = time;
         this.status = status;
+
     }
     public todoModel(){
 
@@ -18,6 +22,8 @@ public class todoModel {
     public String getTitle() {
         return title;
     }
+
+
 
     public String getDescriptipn() {
         return descriptipn;

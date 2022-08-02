@@ -1,13 +1,17 @@
 package com.example.first;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.first.adapter.todoAdapter;
@@ -22,6 +26,8 @@ import java.util.List;
 
 
 public class Todo_app extends AppCompatActivity implements exampleDialoge.exampleDialogeListner {
+
+    //this function of interface helps us to get input from dialougue window and add into list
     @Override
     public void applyTexts(String titl, String dis) {
         if(titl.equals("") || dis.equals("")|| titl.equals("Title")||dis.equals("Description"))
@@ -39,7 +45,8 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         }
 
     }
-
+    CheckBox chk;
+    TextView textView;
     private RecyclerView recycler;
     private todoAdapter taskadapter;
     private List<todoModel> taskLst;
@@ -53,6 +60,11 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         recycler.setLayoutManager(new LinearLayoutManager(this));
         taskadapter=new todoAdapter(this);
         recycler.setAdapter(taskadapter);
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new RecyclerItemTouchHelper(taskadapter));
+        itemTouchHelper.attachToRecyclerView(recycler);
+
+
 
         //creating on click listner for floating button
         btn = (FloatingActionButton)findViewById(R.id.add_btn);

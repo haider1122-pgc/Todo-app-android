@@ -1,5 +1,6 @@
 package com.example.first.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import java.util.List;
 public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
     private List<todoModel> lst;
     private Todo_app todo;
+
 
     public todoAdapter(Todo_app todo){
         this.todo=todo;
@@ -49,11 +51,21 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void deleteItem(int position){
+       // todoModel t = lst.get(position);
+        lst.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public Context getContext() {
+        return todo;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder{
          CheckBox task;
          TextView time,title;
          TextView description;
-         View v;
+
 
          ViewHolder(View  view ) {
             super(view);

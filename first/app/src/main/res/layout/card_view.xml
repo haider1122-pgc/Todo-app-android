@@ -47,8 +47,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="5dp"
-
             android:layout_toEndOf="@+id/todo_checkbox"
+
+
 
             android:includeFontPadding="false"
             android:paddingStart="10dp"
