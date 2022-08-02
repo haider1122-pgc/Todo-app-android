@@ -1,6 +1,7 @@
 package com.example.first.model;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.example.first.R;
 
 public class exampleDialoge extends AppCompatDialogFragment {
     private EditText title,disc;
+    private exampleDialogeListner listner;
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -35,11 +37,28 @@ public class exampleDialoge extends AppCompatDialogFragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        String titl=title.getText().toString();
+                        String dis=disc.getText().toString();
+                        listner.applyTexts(titl,dis);
 
                     }
                 });
         title = view.findViewById(R.id.title);
         disc=view.findViewById(R.id.description);
         return builder.create();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listner= (exampleDialogeListner)context;
+        } catch (ClassCastException e) {
+           throw new ClassCastException(context.toString()+"must implement exampledialoguelistner ");
+        }
+    }
+
+    public interface exampleDialogeListner{
+        void applyTexts(String titl,String dis);
     }
 }

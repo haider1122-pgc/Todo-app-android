@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
      Button btn;
@@ -28,78 +31,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        f=(TextView) findViewById(R.id.forgot);
-        f.setOnClickListener(new View.OnClickListener() {
 
+        final  Intent i = new Intent(MainActivity.this,Todo_app.class);
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
-                createNewDialougue();
-
-
-
+            public void run() {
+                startActivity(i);
             }
-
-
-        });
-
-        c= (CheckBox) findViewById(R.id.ch);
-        c.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //  Toast.makeText(getApplicationContext(), te, Toast.LENGTH_LONG).show();
-                pss=(EditText) findViewById(R.id.password);
-             if(c.isChecked()){
-
-                 pss.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-
-             }
-             else
-             {
-                 pss.setTransformationMethod(PasswordTransformationMethod.getInstance());
-             }
-
-
-            }
-
-
-        });
-
-        //opening dashboard after validating email and pass
-        bt= (Button)findViewById(R.id.login_btn);
-        bt.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                email =  (EditText) findViewById(R.id.email);
-                String em = email.getText().toString();
-                pass=(EditText) findViewById(R.id.password);
-                String ps = pass.getText().toString();
-
-                //  Toast.makeText(getApplicationContext(), te, Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(), em, Toast.LENGTH_LONG).show();
-                if(em.equals("admin123@gmail.com") && ps.equals("admin123")){
-                    openNewAvtivityOnbtnClick();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-
-        });
-        t= (TextView)findViewById(R.id.createAcc);
-        t.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //  Toast.makeText(getApplicationContext(), te, Toast.LENGTH_LONG).show();
-
-
-                openNewAvtivityOnTVClick();
-            }
-
-
-        });
+        },2000);
 
 
 

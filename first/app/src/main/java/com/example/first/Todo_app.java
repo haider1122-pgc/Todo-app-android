@@ -4,20 +4,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.first.adapter.todoAdapter;
 import com.example.first.model.exampleDialoge;
 import com.example.first.model.todoModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
-public class Todo_app extends AppCompatActivity {
+public class Todo_app extends AppCompatActivity implements exampleDialoge.exampleDialogeListner {
+    @Override
+    public void applyTexts(String titl, String dis) {
+        if(titl.equals("") || dis.equals("")|| titl.equals("Title")||dis.equals("Description"))
+        {
+            Toast.makeText(getApplicationContext(), "Invalid Input", Toast.LENGTH_LONG).show();
+        }
+        else {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+
+            todoModel t = new todoModel(titl, dis, formatter.format(date).toString(), false);
+
+            taskLst.add(t);
+            taskadapter.setTask(taskLst);
+        }
+
+    }
 
     private RecyclerView recycler;
     private todoAdapter taskadapter;
@@ -51,7 +72,7 @@ public class Todo_app extends AppCompatActivity {
 
         //dummy data
         todoModel t1 = new todoModel("assignment1","need to complete in time","15 jul, 2018 10:12:11",false);
-        todoModel t2 = new todoModel("reading","hoppies requirement","16 jul, 2018 10:12:11",true);
+        todoModel t2 = new todoModel("reading","hobbies requirement","16 jul, 2018 10:12:11",true);
         todoModel t3 = new todoModel("cricket match","highly important ","15 jul, 2018 10:12:11",false);
         todoModel t4 = new todoModel("assignment2","need to complete in time","18 jul, 2018 10:12:11",false);
         taskLst.add(t1);
