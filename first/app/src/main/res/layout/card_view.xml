@@ -43,12 +43,10 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="319dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/todo_checkbox"
-
 
 
             android:includeFontPadding="false"
@@ -56,6 +54,18 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             tool:text="This is a sample task " />
+
+        <ImageView
+            android:id="@+id/line"
+            android:layout_width="6dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="4dp"
+            android:background="#A9A9A9"
+            android:contentDescription="TODO"
+            android:layerType="software"
+            android:src="@drawable/line"
+            tool:ignore="ContentDescription" />
 
 
     </RelativeLayout>

@@ -32,13 +32,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final  Intent i = new Intent(MainActivity.this,Todo_app.class);
+        final  Intent i = new Intent(MainActivity.this,log_in_screen.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(i);
             }
-        },2000);
+        },1000);
 
 
 

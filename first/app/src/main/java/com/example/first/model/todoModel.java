@@ -15,6 +15,18 @@ public class todoModel {
         this.status = status;
 
     }
+    public todoModel(String title, String descriptipn, String time) {
+        this.title = title;
+        this.descriptipn = descriptipn;
+        this.time = time;
+
+
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public todoModel(){
 
     }
@@ -36,4 +48,5 @@ public class todoModel {
     public boolean isStatus() {
         return status;
     }
+    
 }

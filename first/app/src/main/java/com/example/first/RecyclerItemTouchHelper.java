@@ -20,6 +20,12 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     private todoAdapter adapter;
 
+
+    @Override
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+    }
+
     public RecyclerItemTouchHelper(todoAdapter adapter) {
         super(0, ItemTouchHelper.LEFT );
         this.adapter = adapter;
@@ -30,6 +36,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         return false;
     }
+
+
 
     @Override
     public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
@@ -43,20 +51,28 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             adapter.deleteItem(position);
+
                         }
                     });
             builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
                     adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    // adapter.notifyDataSetChanged();
+
+
                 }
             });
+
             AlertDialog dialog = builder.create();
             dialog.show();
         } else {
 
         }
     }
+
+
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
