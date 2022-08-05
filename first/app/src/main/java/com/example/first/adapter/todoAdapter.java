@@ -24,6 +24,7 @@ import com.example.first.Todo_app;
 import com.example.first.model.todoModel;
 import com.example.first.recyclerViewInterface;
 
+import java.util.Collections;
 import java.util.List;
 
 public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
@@ -52,6 +53,7 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder( ViewHolder holder, int position) {
+
         todoModel item = lst.get(position);
         holder.title.setText(item.getTitle());
         holder.task.setChecked(item.isStatus());

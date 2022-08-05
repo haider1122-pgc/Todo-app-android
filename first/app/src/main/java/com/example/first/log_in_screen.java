@@ -22,6 +22,7 @@ public class log_in_screen extends AppCompatActivity {
     TextView t,f;
     Button bt;
     EditText pss;
+    Db_Handler db;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
@@ -30,7 +31,7 @@ public class log_in_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in_screen);
 
-
+        db= new Db_Handler(log_in_screen.this);
         c= (CheckBox) findViewById(R.id.ch);
         c.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +67,7 @@ public class log_in_screen extends AppCompatActivity {
 
                 //  Toast.makeText(getApplicationContext(), te, Toast.LENGTH_LONG).show();
                 //Toast.makeText(getApplicationContext(), em, Toast.LENGTH_LONG).show();
-                if(em.equals("admin123@gmail.com") && ps.equals("admin123")){
+                if(db.checkPerson("PERSON","EMAIL",em,"PASSWORD",ps)){
                     openNewAvtivityOnbtnClick();
                 }
                 else{

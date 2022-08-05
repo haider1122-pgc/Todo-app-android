@@ -25,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -62,18 +63,31 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_app);
         taskLst=new ArrayList<>();
+
         recycler= findViewById(R.id.tasksRecyclerView);
+
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
         taskadapter=new todoAdapter(this,this);
+
         recycler.setAdapter(taskadapter);
+        //stop adapter to change position after data changes
         RecyclerView.ItemAnimator animator = recycler.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
+        //for swip delete
         ItemTouchHelper itemTouchHelper = new
                 ItemTouchHelper(new RecyclerItemTouchHelper(taskadapter));
         itemTouchHelper.attachToRecyclerView(recycler);
+
+       /* //for reversing recycler view
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+        recycler.setLayoutManager(mLayoutManager);
+
+        */
 
 
 
