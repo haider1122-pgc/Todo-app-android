@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
@@ -32,38 +33,25 @@ import java.util.List;
 
 public class Todo_app extends AppCompatActivity implements exampleDialoge.exampleDialogeListner,recyclerViewInterface, editDialoge.editDialogeListner {
 
-    //this function of interface helps us to get input from dialougue window and add into list
-    @Override
-    public void applyTexts(String titl, String dis) {
-        if(titl.equals("") || dis.equals("")|| titl.equals("Title")||dis.equals("Description"))
-        {
-            Toast.makeText(getApplicationContext(), "Invalid Input", Toast.LENGTH_LONG).show();
-        }
-        else {
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            Date date = new Date();
 
-            todoModel t = new todoModel(titl, dis, formatter.format(date).toString(), false);
-
-            taskLst.add(t);
-            taskadapter.setTask(taskLst);
-
-
-        }
-
-    }
     CheckBox chk;
     TextView textView;
     private RecyclerView recycler;
     private todoAdapter taskadapter;
     private List<todoModel> taskLst;
     FloatingActionButton btn;
+    SharedPreferences sharedPreferences;
+    private  static final  String SHARED_PREF_NAME ="myPref";
+    private  static final  String KEY_NAME ="id";
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_app);
         taskLst=new ArrayList<>();
-
+        //initializing shared preferences
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME,MODE_PRIVATE);
         recycler= findViewById(R.id.tasksRecyclerView);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -145,7 +133,34 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         //taskLst.get(position).setStatus(status);
         todoModel t = new todoModel(taskLst.get(position).getTitle(), taskLst.get(position).getDescriptipn(), taskLst.get(position).getTime(), status);
         taskadapter.editItemStatus(position, t);
+        /*
+        //testing shared preferences
+        int id = sharedPreferences.getInt(KEY_NAME,-1);
+        if(id!=-1){
+            Toast.makeText(getApplicationContext(), id+"", Toast.LENGTH_LONG).show();
+        }
+         */
 
+
+    }
+    //this function of interface helps us to get input from dialougue window and add into list
+    @Override
+    public void applyTexts(String titl, String dis) {
+        if(titl.equals("") || dis.equals("")|| titl.equals("Title")||dis.equals("Description"))
+        {
+            Toast.makeText(getApplicationContext(), "Invalid Input", Toast.LENGTH_LONG).show();
+        }
+        else {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+
+            todoModel t = new todoModel(titl, dis, formatter.format(date).toString(), false);
+
+            taskLst.add(t);
+            taskadapter.setTask(taskLst);
+
+
+        }
 
     }
     //this function helps us to get input from update dialougue window and update data into lsit by calling update function

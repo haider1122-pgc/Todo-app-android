@@ -39,7 +39,7 @@ public class signup_screen extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //  Toast.makeText(getApplicationContext(), te, Toast.LENGTH_LONG).show();
+
                 if(!name.getText().toString().equals("") && !contact.getText().toString().equals("") && !email.getText().toString().equals("") && !pass.getText().toString().equals("")) {
 
                     personModel p = new personModel(name.getText().toString(), contact.getText().toString(), email.getText().toString(), pass.getText().toString());

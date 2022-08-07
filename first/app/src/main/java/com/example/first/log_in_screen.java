@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -13,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.security.PrivateKey;
 
 public class log_in_screen extends AppCompatActivity {
 
@@ -25,12 +28,17 @@ public class log_in_screen extends AppCompatActivity {
     Db_Handler db;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
+    SharedPreferences sharedPreferences;
+    private  static final  String SHARED_PREF_NAME ="myPref";
+    private  static final  String KEY_NAME ="id";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in_screen);
-
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME,MODE_PRIVATE);
         db= new Db_Handler(log_in_screen.this);
         c= (CheckBox) findViewById(R.id.ch);
         c.setOnClickListener(new View.OnClickListener() {
@@ -64,9 +72,14 @@ public class log_in_screen extends AppCompatActivity {
                 String em = email.getText().toString();
                 pass=(EditText) findViewById(R.id.password);
                 String ps = pass.getText().toString();
-
-                //  Toast.makeText(getApplicationContext(), te, Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(), em, Toast.LENGTH_LONG).show();
+                //when a person log in his key is saved in shared prefrence
+                SharedPreferences.Editor editor= sharedPreferences.edit();
+                int key;
+                key=db.getPersonId("PERSON","EMAIL",em,"PASSWORD",ps);
+                if(key!=-1) {
+                    editor.putInt(KEY_NAME,key );
+                    editor.apply();
+                }
                 if(db.checkPerson("PERSON","EMAIL",em,"PASSWORD",ps)){
                     openNewAvtivityOnbtnClick();
                 }
