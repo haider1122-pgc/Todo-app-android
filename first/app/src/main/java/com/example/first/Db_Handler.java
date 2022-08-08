@@ -1,7 +1,10 @@
 package com.example.first;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -18,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Db_Handler extends SQLiteOpenHelper {
+
+
+
     private SQLiteDatabase db;
     Context context;
     private static  final String DATABASE_NAME = "TODO_DATABASE";
@@ -35,6 +41,8 @@ public class Db_Handler extends SQLiteOpenHelper {
     private static  final String COL_DESCRIPTION = "DESCRIPTION";
     private static  final String COL_TIME = "TIME";
     private static  final String COL_STATUS = "STATUS";
+    //shared pref id
+
 
 
 
@@ -52,6 +60,7 @@ public class Db_Handler extends SQLiteOpenHelper {
                 "ON UPDATE CASCADE       ON DELETE CASCADE)");
 
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -113,7 +122,7 @@ public class Db_Handler extends SQLiteOpenHelper {
         db=super.getReadableDatabase();
         String Query = "Select * from " + TableName + " where " + emailColumn + " = '" + email+"' AND "+ passwordColumn + " = '" + pass+"'";
         Cursor cursor = db.rawQuery(Query, null);
-        int id=-1;
+         int id=-1;
         if(cursor.getCount() <= 0){
             cursor.close();
             return id;
@@ -125,6 +134,59 @@ public class Db_Handler extends SQLiteOpenHelper {
         cursor.close();
         return id;
     }
-    
+    @SuppressLint("Range")
+    public  String getPersonName( int id) {
+        db=super.getReadableDatabase();
+        String Query = "Select * from " + "PERSON" + " where " + "ID" + " = " + id;
+        Cursor cursor = db.rawQuery(Query, null);
+        String name;
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return null;
+        }
+        cursor.moveToFirst();
+        name= cursor.getString(cursor.getColumnIndex("NAME"));
+
+        //Toast.makeText(context, id+"", Toast.LENGTH_LONG).show();
+        cursor.close();
+        return name;
+    }
+    //this function returns the list of the person who is currently login taking input the id of the person which is gained by shared preferences
+    @SuppressLint("Range")
+    public List<todoModel> getAllTasks(int i){
+
+
+        db = super.getWritableDatabase();
+        Cursor cursor = null;
+        String Query = "Select * from " + TABLE_TASK + " where " + COL_PERSON_ID + " = " + i+" ";
+        List<todoModel> modelList = new ArrayList<>();
+
+        db.beginTransaction();
+        try {
+            cursor = db.rawQuery(Query,null);
+            boolean status;
+
+            if (cursor !=null){
+                if (cursor.moveToFirst()){
+                    do {
+                        if(cursor.getInt(cursor.getColumnIndex(COL_STATUS))==1){
+                            status=true;
+                        }
+                        else{
+                            status=false;
+                        }
+                        @SuppressLint("Range") todoModel task = new todoModel(cursor.getString(cursor.getColumnIndex(COL_TITLE)),cursor.getString(cursor.getColumnIndex(COL_DESCRIPTION)),cursor.getString(cursor.getColumnIndex(COL_TIME)),status);
+                        modelList.add(task);
+
+                    }while (cursor.moveToNext());
+                }
+            }
+        }finally {
+            db.endTransaction();
+            assert cursor != null;
+            cursor.close();
+        }
+        return modelList;
+    }
 
 }

@@ -9,13 +9,17 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,8 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
     Db_Handler db;
     CheckBox chk;
     TextView textView;
+    Button logoutBtn;
+    Spinner spinner;
     private RecyclerView recycler;
     private todoAdapter taskadapter;
     private List<todoModel> taskLst;
@@ -45,9 +51,11 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
     private  static final  String SHARED_PREF_NAME ="myPref";
     private  static final  String KEY_NAME ="id";
 
+
     public Context getContext() {
         return Todo_app.this;
     }
+
 
     @Override
 
@@ -58,13 +66,17 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         taskLst=new ArrayList<>();
         //initializing shared preferences
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME,MODE_PRIVATE);
+
         recycler= findViewById(R.id.tasksRecyclerView);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        taskadapter=new todoAdapter(this,this);
+        taskadapter=new todoAdapter(this,this,db);
 
         recycler.setAdapter(taskadapter);
+        //setting all tasks from db to list
+        taskLst=db.getAllTasks(sharedPreferences.getInt(KEY_NAME,-1));
+        taskadapter.setTask(taskLst);
         //stop adapter to change position after data changes
         RecyclerView.ItemAnimator animator = recycler.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
@@ -83,6 +95,44 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
 
         */
 
+         spinner = (Spinner) findViewById(R.id.spinner);
+        // Spinner click listener
+
+        int id = sharedPreferences.getInt(KEY_NAME,-1);
+
+        // Spinner Drop down elements
+        List<String> item = new ArrayList<String>();
+        item.add(db.getPersonName(id));
+        item.add("Log out");
+
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, item);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(String.valueOf(spinner.getSelectedItem()).toString().equals("Log out")){
+                    Intent intent = new Intent(Todo_app.this, log_in_screen.class);
+                    startActivity(intent);
+                }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
 
         //creating on click listner for floating button
@@ -100,7 +150,7 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
 
 
         });
-
+/*
         //dummy data
         todoModel t1 = new todoModel("Assignment1","need to complete in time","06/11/2017 12:26:18",false);
         todoModel t2 = new todoModel("Reading","hobbies requirement","06/11/2017 12:26:28",true);
@@ -123,7 +173,10 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         taskLst.add(t9);
         taskLst.add(t10);
         taskadapter.setTask(taskLst);
+
+ */
     }
+
     //opening edit dialougue on click of item
     @Override
     public void onItemClick(int position) {
@@ -192,4 +245,5 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
 
 
     }
+
 }

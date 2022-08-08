@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 public  class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
+    Db_Handler db;
     private List<todoModel> lst;
     private RecyclerView recycler;
     private Todo_app todo;
@@ -39,16 +40,10 @@ public  class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
 
 
 
-    public todoAdapter(Todo_app todo, Todo_app inter){
-
+    public todoAdapter(Todo_app todo, Todo_app inter,Db_Handler db){
+        this.db= db;
         this.todo=todo;
         this.inter=inter;
-    }
-    Db_Handler db;
-
-    {
-        assert false;
-        db = new Db_Handler(todo.getContext());
     }
 
 
