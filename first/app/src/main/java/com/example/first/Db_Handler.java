@@ -10,7 +10,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.first.adapter.todoAdapter;
 import com.example.first.model.personModel;
+import com.example.first.model.todoModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +39,11 @@ public class Db_Handler extends SQLiteOpenHelper {
 
 
     public Db_Handler(@Nullable Context context ) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
         this.context=context;
     }
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -55,6 +59,31 @@ public class Db_Handler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
         onCreate(db);
 
+    }
+    public void insertTask(@NonNull todoModel model, int personID){
+
+        db = super.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_TITLE , model.getTitle());
+        values.put(COL_DESCRIPTION , model.getDescriptipn());
+        values.put(COL_TIME , model.getTime());
+        int status;
+        if(model.isStatus()){
+            status=1;
+        }
+        else
+        {
+            status=0;
+        }
+        values.put(COL_STATUS ,status);
+        values.put(COL_PERSON_ID ,personID);
+        db.insert(TABLE_TASK , null , values);
+        //Toast.makeText(context, "Added", Toast.LENGTH_LONG).show();
+    }
+    public void deleteTask(int id ){
+        db = this.getWritableDatabase();
+        db.delete(TABLE_TASK , "ID=?" , new String[]{String.valueOf(id)});
+        Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
     }
     public void insertPerson(@NonNull personModel model){
 
@@ -78,6 +107,7 @@ public class Db_Handler extends SQLiteOpenHelper {
         cursor.close();
         return true;
     }
+    //this id is used in shared preferennces and as an foreign key in tasks table
     @SuppressLint("Range")
     public  int getPersonId(String TableName, String emailColumn, String email, String passwordColumn, String pass) {
         db=super.getReadableDatabase();
@@ -95,5 +125,6 @@ public class Db_Handler extends SQLiteOpenHelper {
         cursor.close();
         return id;
     }
+    
 
 }

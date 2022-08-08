@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ import java.util.List;
 
 public class Todo_app extends AppCompatActivity implements exampleDialoge.exampleDialogeListner,recyclerViewInterface, editDialoge.editDialogeListner {
 
-
+    Db_Handler db;
     CheckBox chk;
     TextView textView;
     private RecyclerView recycler;
@@ -44,11 +45,16 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
     private  static final  String SHARED_PREF_NAME ="myPref";
     private  static final  String KEY_NAME ="id";
 
+    public Context getContext() {
+        return Todo_app.this;
+    }
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_app);
+        db=new Db_Handler(Todo_app.this);
         taskLst=new ArrayList<>();
         //initializing shared preferences
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME,MODE_PRIVATE);
@@ -153,10 +159,12 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         else {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date = new Date();
-
+            //getting shared preference key
+            int id = sharedPreferences.getInt(KEY_NAME,-1);
             todoModel t = new todoModel(titl, dis, formatter.format(date).toString(), false);
 
             taskLst.add(t);
+            db.insertTask(t,id);
             taskadapter.setTask(taskLst);
 
 

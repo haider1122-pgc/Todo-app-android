@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.first.Db_Handler;
 import com.example.first.R;
 import com.example.first.Todo_app;
 import com.example.first.model.todoModel;
@@ -27,11 +28,12 @@ import com.example.first.recyclerViewInterface;
 import java.util.Collections;
 import java.util.List;
 
-public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
+public  class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
     private List<todoModel> lst;
     private RecyclerView recycler;
     private Todo_app todo;
     private final recyclerViewInterface inter;
+
 
 
 
@@ -42,7 +44,12 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
         this.todo=todo;
         this.inter=inter;
     }
+    Db_Handler db;
 
+    {
+        assert false;
+        db = new Db_Handler(todo.getContext());
+    }
 
 
     public ViewHolder onCreateViewHolder(ViewGroup parent , int viewType ){
@@ -87,7 +94,9 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
     public void deleteItem(int position){
        // todoModel t = lst.get(position);
         lst.remove(position);
-        Toast.makeText(todo.getApplicationContext(), "Task Deleted", Toast.LENGTH_LONG).show();
+        db.deleteTask(position);
+
+        //Toast.makeText(todo.getApplicationContext(), "Task Deleted", Toast.LENGTH_LONG).show();
         notifyItemRemoved(position);
     }
 
