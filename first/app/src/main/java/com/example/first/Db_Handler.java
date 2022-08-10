@@ -69,6 +69,7 @@ public class Db_Handler extends SQLiteOpenHelper {
         onCreate(db);
 
     }
+    //this function inserts task in tasks table
     public void insertTask(@NonNull todoModel model, int personID){
 
         db = super.getWritableDatabase();
@@ -89,11 +90,31 @@ public class Db_Handler extends SQLiteOpenHelper {
         db.insert(TABLE_TASK , null , values);
         //Toast.makeText(context, "Added", Toast.LENGTH_LONG).show();
     }
+    //this function deletes a provided id task from list
     public void deleteTask(int id ){
+
         db = this.getWritableDatabase();
         db.delete(TABLE_TASK , "ID=?" , new String[]{String.valueOf(id)});
-        Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
+
+
     }
+    //this function only updates status of task in db
+    public void updateStatus(int id , int status){
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_STATUS , status);
+        db.update(TABLE_TASK , values , "ID=?" , new String[]{String.valueOf(id)});
+    }
+    //this function updated task title description and time not status
+    public void updateTask(int id , String title,String description, String time){
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_TITLE,title);
+        values.put(COL_DESCRIPTION , description);
+        values.put(COL_TIME , time);
+        db.update(TABLE_TASK , values , "ID=?" , new String[]{String.valueOf(id)});
+    }
+    //This function inserts the data of person in db (registration of person)
     public void insertPerson(@NonNull personModel model){
 
         db = super.getWritableDatabase();
@@ -105,6 +126,7 @@ public class Db_Handler extends SQLiteOpenHelper {
         db.insert(TABLE_PERSON , null , values);
         Toast.makeText(context, "Added", Toast.LENGTH_LONG).show();
     }
+    //this function validates that the person with provided credentials is avaiable in db helped in login purpose
     public  boolean checkPerson(String TableName, String emailColumn, String email,String passwordColumn, String pass) {
         db=super.getReadableDatabase();
         String Query = "Select * from " + TableName + " where " + emailColumn + " = '" + email+"' AND "+ passwordColumn + " = '" + pass+"'";
@@ -134,6 +156,7 @@ public class Db_Handler extends SQLiteOpenHelper {
         cursor.close();
         return id;
     }
+    //this function returns name of a person who is currently login to the app
     @SuppressLint("Range")
     public  String getPersonName( int id) {
         db=super.getReadableDatabase();
@@ -175,7 +198,7 @@ public class Db_Handler extends SQLiteOpenHelper {
                         else{
                             status=false;
                         }
-                        @SuppressLint("Range") todoModel task = new todoModel(cursor.getString(cursor.getColumnIndex(COL_TITLE)),cursor.getString(cursor.getColumnIndex(COL_DESCRIPTION)),cursor.getString(cursor.getColumnIndex(COL_TIME)),status);
+                        @SuppressLint("Range") todoModel task = new todoModel(cursor.getString(cursor.getColumnIndex(COL_TITLE)),cursor.getString(cursor.getColumnIndex(COL_DESCRIPTION)),cursor.getString(cursor.getColumnIndex(COL_TIME)),status,cursor.getInt(cursor.getColumnIndex(COL_TASK_ID)));
                         modelList.add(task);
 
                     }while (cursor.moveToNext());

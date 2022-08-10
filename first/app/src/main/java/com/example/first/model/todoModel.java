@@ -7,13 +7,23 @@ public class todoModel {
     private String title,descriptipn;
     private String time;
     private boolean status;
-    //private int id;
+    private int id;
 
+    public todoModel(String title, String descriptipn, String time, boolean status,int id) {
+        this.title = title;
+        this.descriptipn = descriptipn;
+        this.time = time;
+        this.status = status;
+        this.id=id;
+
+
+    }
     public todoModel(String title, String descriptipn, String time, boolean status) {
         this.title = title;
         this.descriptipn = descriptipn;
         this.time = time;
         this.status = status;
+
 
 
     }
@@ -37,8 +47,9 @@ public class todoModel {
         return title;
     }
 
-
-
+    public int getId() {
+        return id;
+    }
 
     public String getDescriptipn() {
         return descriptipn;

@@ -190,7 +190,7 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
     public void onCheckBoxClick(int position, boolean status) {
         //Toast.makeText(getApplicationContext(), position+"", Toast.LENGTH_LONG).show();
         //taskLst.get(position).setStatus(status);
-        todoModel t = new todoModel(taskLst.get(position).getTitle(), taskLst.get(position).getDescriptipn(), taskLst.get(position).getTime(), status);
+        todoModel t = new todoModel(taskLst.get(position).getTitle(), taskLst.get(position).getDescriptipn(), taskLst.get(position).getTime(), status,taskLst.get(position).getId());
         taskadapter.editItemStatus(position, t);
         /*
         //testing shared preferences
@@ -219,6 +219,7 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
             taskLst.add(t);
             db.insertTask(t,id);
             taskadapter.setTask(taskLst);
+            Toast.makeText(getApplicationContext(), "Task Added", Toast.LENGTH_LONG).show();
 
 
         }
@@ -237,9 +238,7 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
             //getting previous status
             boolean l;
             l = taskLst.get(position).isStatus();
-            todoModel t = new todoModel(titl, dis, formatter.format(date).toString(), l);
-
-
+            todoModel t = new todoModel(titl, dis, formatter.format(date).toString(), l,taskLst.get(position).getId());
             taskadapter.editItem(position, t);
         }
 

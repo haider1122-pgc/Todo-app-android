@@ -82,42 +82,47 @@ public  class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
         //notifyItemRangeChanged(0, lst.size());
         notifyItemInserted(lst.size());
 
-        Toast.makeText(todo.getApplicationContext(), "Task Added", Toast.LENGTH_LONG).show();
+
 
     }
 
     public void deleteItem(int position){
-       // todoModel t = lst.get(position);
+        //deleting from db
+        db.deleteTask(lst.get(position).getId());
+        //deleting from list
         lst.remove(position);
-        db.deleteTask(position);
-
-        //Toast.makeText(todo.getApplicationContext(), "Task Deleted", Toast.LENGTH_LONG).show();
+        Toast.makeText(todo.getApplicationContext(), "Task Deleted", Toast.LENGTH_LONG).show();
         notifyItemRemoved(position);
     }
 
     public void editItem(int position, todoModel e) {
+        //updating task in list
         lst.set(position,e);
-
-        //notifyDataSetChanged();
+        //updating in db
+        db.updateTask(lst.get(position).getId(),lst.get(position).getTitle(),lst.get(position).getDescriptipn(),lst.get(position).getTime());
         notifyItemChanged(position);
         Toast.makeText(todo.getApplicationContext(), "Task Updated", Toast.LENGTH_LONG).show();
-
-       // notifyItemRangeChanged(0, lst.size());
-
 
     }
 
 
 
     public void editItemStatus(int position, todoModel e) {
-
+        //updating status in list
         lst.set(position,e);
-
-       // notifyDataSetChanged();
+        //as in db boolean value is not stored so converting boolean into integer then updating in db
+        int status;
+        if(e.isStatus()){
+            Toast.makeText(todo.getApplicationContext(), "Task Completed", Toast.LENGTH_LONG).show();
+            status=1;
+        }
+        else{
+            Toast.makeText(todo.getApplicationContext(), "Task Not Completed", Toast.LENGTH_LONG).show();
+            status=0;
+        }
+        db.updateStatus(lst.get(position).getId(),status);
         notifyItemChanged(position);
-        Toast.makeText(todo.getApplicationContext(), "Status Updated", Toast.LENGTH_LONG).show();
-       // notifyItemRangeChanged(0, lst.size());
-        //notifyItemInserted( position);
+
 
 
     }
