@@ -50,6 +50,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
         if (direction == ItemTouchHelper.LEFT) {
             AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
+            builder.setCancelable(false);
             builder.setTitle("Delete Task");
             builder.setMessage("Are you sure you want to delete this Task?");
             builder.setPositiveButton("Confirm",
@@ -72,6 +73,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
                 }
             });
+
             AlertDialog dialog = builder.create();
             dialog.show();
 
