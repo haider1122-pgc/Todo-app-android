@@ -1,6 +1,8 @@
 package com.example.first;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.first.R;
 import com.example.first.adapter.todoAdapter;
@@ -19,6 +22,7 @@ import com.example.first.adapter.todoAdapter;
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     private todoAdapter adapter;
+    RecyclerView recyclerView;
 
 
     @Override
@@ -26,9 +30,10 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         super.clearView(recyclerView, viewHolder);
     }
 
-    public RecyclerItemTouchHelper(todoAdapter adapter) {
+    public RecyclerItemTouchHelper(todoAdapter adapter,RecyclerView recyclerView) {
         super(0, ItemTouchHelper.LEFT );
         this.adapter = adapter;
+        this.recyclerView=recyclerView;
     }
 
 
@@ -42,6 +47,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
         final int position = viewHolder.getAdapterPosition();
+
         if (direction == ItemTouchHelper.LEFT) {
             AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
             builder.setTitle("Delete Task");
@@ -50,23 +56,29 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
                             adapter.deleteItem(position);
 
                         }
                     });
             builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
-                    adapter.notifyItemChanged(viewHolder.getAdapterPosition());
-                    // adapter.notifyDataSetChanged();
+                    //adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    //again setting adapter because item change didnt work when animator is false
+                    recyclerView.setAdapter(adapter);
 
 
                 }
             });
-
             AlertDialog dialog = builder.create();
             dialog.show();
+
+
+
+
+
         } else {
 
         }

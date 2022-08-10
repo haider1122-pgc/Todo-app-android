@@ -35,12 +35,11 @@ public  class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder> {
     private Todo_app todo;
     private final recyclerViewInterface inter;
 
+    public List<todoModel> getLst() {
+        return lst;
+    }
 
-
-
-
-
-    public todoAdapter(Todo_app todo, Todo_app inter,Db_Handler db){
+    public todoAdapter(Todo_app todo, Todo_app inter, Db_Handler db){
         this.db= db;
         this.todo=todo;
         this.inter=inter;

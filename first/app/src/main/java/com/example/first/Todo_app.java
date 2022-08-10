@@ -51,14 +51,14 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
     private  static final  String SHARED_PREF_NAME ="myPref";
     private  static final  String KEY_NAME ="id";
 
-
+    //return context of todo_app_activity
     public Context getContext() {
         return Todo_app.this;
     }
 
 
-    @Override
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_app);
@@ -77,15 +77,19 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         //setting all tasks from db to list
         taskLst=db.getAllTasks(sharedPreferences.getInt(KEY_NAME,-1));
         taskadapter.setTask(taskLst);
-        //stop adapter to change position after data changes
+        //making animation false so recycler view doesn't change its position
         RecyclerView.ItemAnimator animator = recycler.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
+
         //for swip delete
         ItemTouchHelper itemTouchHelper = new
-                ItemTouchHelper(new RecyclerItemTouchHelper(taskadapter));
+                ItemTouchHelper(new RecyclerItemTouchHelper(taskadapter,recycler));
         itemTouchHelper.attachToRecyclerView(recycler);
+        //stop adapter to change position after data changes
+
+
 
        /* //for reversing recycler view
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -140,6 +144,7 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 //  Toast.makeText(getApplicationContext(), te, Toast.LENGTH_LONG).show();
                exampleDialoge e = new exampleDialoge();
 
@@ -177,9 +182,12 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
  */
     }
 
+
+
     //opening edit dialougue on click of item
     @Override
     public void onItemClick(int position) {
+
         editDialoge e1 = new editDialoge();
         e1.setData(taskLst.get(position).getTitle(),taskLst.get(position).getDescriptipn(),position);
         e1.show(getSupportFragmentManager(),"Example dialoge");
@@ -188,8 +196,7 @@ public class Todo_app extends AppCompatActivity implements exampleDialoge.exampl
     //updating status on click of checkbox
     @Override
     public void onCheckBoxClick(int position, boolean status) {
-        //Toast.makeText(getApplicationContext(), position+"", Toast.LENGTH_LONG).show();
-        //taskLst.get(position).setStatus(status);
+
         todoModel t = new todoModel(taskLst.get(position).getTitle(), taskLst.get(position).getDescriptipn(), taskLst.get(position).getTime(), status,taskLst.get(position).getId());
         taskadapter.editItemStatus(position, t);
         /*
